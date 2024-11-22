@@ -1,59 +1,86 @@
-# VerdiHome - Monitoramento de Energia Doméstica com Fontes Renováveis
+# VerdiHome - Plataforma Inteligente de Gestão Energética
 
-## Descrição do Projeto
-Este projeto é um protótipo funcional em Python que auxilia usuários no monitoramento do consumo energético doméstico e na análise do uso de fontes renováveis de energia (solar e eólica). Ele fornece sugestões práticas para reduzir o consumo de energia, promovendo o uso eficiente e responsável dos recursos.
+VerdiHome é uma solução IoT inteligente que combina automação residencial com um sistema de monitoramento de consumo energético. Com integração MQTT e conectividade WiFi, este projeto fornece alertas em tempo real sobre consumo elevado e permite controle remoto de dispositivos, contribuindo para um uso mais eficiente e sustentável de energia.
 
-## Motivação
-Com o aumento da demanda por energia e a necessidade de adotar práticas sustentáveis, este sistema visa:
-- Facilitar o monitoramento do consumo doméstico.
-- Incentivar a transição para fontes renováveis.
-- Promover a economia de energia e a redução de custos.
+---
 
-## Funcionalidades
-1. **Tabela Informativa Inicial**:
-   - Exibe o consumo médio diário de aparelhos comuns para referência.
+## 🚀 **Principais Funcionalidades**
+- **Monitoramento de Consumo**: Mede o consumo energético em tempo real através de um sensor LDR e publica os dados via MQTT.
+- **Alertas de Consumo Elevado**: Envia notificações quando o consumo excede o limite configurado.
+- **Controle Remoto de Dispositivos**: Recebe comandos para ligar ou desligar um LED, simulando o controle de dispositivos.
+- **Integração MQTT**: Publica e subscreve mensagens para comunicação eficiente.
 
-2. **Entrada de Dados Personalizada**:
-   - Permite ao usuário registrar os aparelhos utilizados e seus consumos diários.
+---
 
-3. **Cálculo do Consumo Total**:
-   - Calcula o consumo total diário de energia.
+## 🛠️ **Requisitos do Sistema**
+### Hardware
+- ESP32 
+- Resistor LDR (sensor de luz)
+- LED e resistor para controle
+- Protoboard e fios de conexão
 
-4. **Sugestões de Economia**:
-   - Indica aparelhos com consumo elevado e sugere reduzir seu uso.
+### Software
+- Wokiwi
+- Bibliotecas:
+  - `WiFi.h` (embarcada no ESP32/ESP8266)
+  - `PubSubClient.h` (disponível no gerenciador de bibliotecas da Arduino IDE)
 
-5. **Análise de Energia Renovável**:
-   - Compara o consumo com a energia gerada por fontes renováveis, destacando déficits ou excedentes.
+---
 
-6. **Exportação de Dados**:
-   - Salva o consumo total, sugestões e análise em um arquivo de texto (`dados_consumo.txt`).
+## 📦 **Como Configurar e Executar**
+### 1️⃣ **Configuração do Ambiente**
+1. Instale a **Arduino IDE**.
+2. Adicione suporte ao ESP32 ou ESP8266 no gerenciador de placas da IDE:
+   - Vá em **Arquivo > Preferências** e adicione a URL: 
+     `https://dl.espressif.com/dl/package_esp32_index.json`
+   - Em **Ferramentas > Placas > Gerenciador de Placas**, instale o pacote ESP32.
 
-7. **Tratamento de Exceções**:
-   - Garante robustez ao lidar com entradas inválidas, como valores negativos ou inconsistentes.
+### 2️⃣ **Bibliotecas Necessárias**
+Instale a biblioteca **PubSubClient**:
+- Vá em **Sketch > Incluir Biblioteca > Gerenciar Bibliotecas**.
+- Pesquise por `PubSubClient` e clique em **Instalar**.
 
-## Instruções de Uso
-### Pré-requisitos:
-- Python 3.x instalado no sistema.
+### 3️⃣ **Configuração do Código**
+1. Insira as credenciais da sua rede WiFi no código:
+   ```cpp
+   const char* ssid = "Wokiwi-GUEST";
+   const char* password = "";
 
-### Execução:
-1. Clone este repositório:  
-   ```bash
-   git clone https://github.com/fabriciobettarello/verdihomepython.git
-    ```
-2. Navegue até o diretório do projeto:
-   ```bash
-   cd verdihomepython
-    ```
-3. Execute o programa:
-   ```bash
-   python verdihomepython.py
-    ```
 
-## Interação:
-- Siga as instruções na interface para inserir os aparelhos, consumos e dados de geração de energia renovável.
-- Confira o arquivo dados_consumo.txt para os resultados salvos.
+## 📚 **Como Usar**
+
+### **Monitoramento de Consumo**
+- O consumo energético é monitorado pelo sensor LDR e os valores são enviados para o tópico MQTT:
+  - **Tópico**: `verdiHome/consumo`
+  - **Descrição**: Publica os dados do consumo energético em tempo real.
+
+### **Alertas de Consumo Elevado**
+- Quando o consumo ultrapassa o limite configurado no código (valor padrão: `800`), um alerta é enviado para o seguinte tópico MQTT:
+  - **Tópico**: `verdiHome/alerta`
+  - **Descrição**: Envia uma mensagem notificando o consumo elevado.
+
+### **Controle de Dispositivos**
+- Comandos MQTT podem ser enviados para controlar dispositivos (simulado por um LED no projeto):
+  - **Tópico**: `verdiHome/comando`
+  - **Mensagens**:
+    - `"ligar"`: Liga o LED.
+    - `"desligar"`: Desliga o LED.
+
+---
+
+## 📡 **Tópicos MQTT**
+
+### **Publicações**
+1. **Tópico**: `verdiHome/consumo`  
+   **Descrição**: Publica os dados do consumo energético.
+2. **Tópico**: `verdiHome/alerta`  
+   **Descrição**: Notifica quando o consumo ultrapassa o limite configurado.
+### **Assinaturas**
+1. **Tópico**: `verdiHome/comando`  
+   **Descrição**: Recebe comandos para ligar ou desligar dispositivos (LED no exemplo).
+
 
 ## Informações dos Alunos
-- Fabricio Bettarello Heluani RM 554638
-- Thamiris Almeida Soares da Silva RM 559155
-- Eric Yuji Ito RM 554869
+- Fabricio Bettarello Heluani - RM 554638
+- Thamiris Almeida Soares da Silva - RM 559155
+- Eric Yuji Ito - RM 554869
